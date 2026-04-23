@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>KBTI 人格测试 | 可比克简薯片 · 纯粹原料人格</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(145deg, #fef3e6 0%, #fce9d2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 薯片装饰背景 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -60px;
+      right: -60px;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 215, 150, 0.35) 5%, transparent 70%);
+      border-radius: 50%;
+      transform: rotate(15deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      bottom: -30px;
+      left: -30px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle at 60% 60%, rgba(180, 210, 230, 0.4) 5%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 550px;
+      background: rgba(255, 248, 245, 0.9);
+      backdrop-filter: blur(18px);
+      background: #fffcf7;
+      border-radius: 48px;
+      box-shadow: 0 30px 50px rgba(160, 100, 40, 0.15), 0 10px 25px rgba(0,0,0,0.08), inset 0 2px 8px rgba(255,255,255,0.8);
+      padding: 30px 24px 35px;
+      position: relative;
+      z-index: 2;
+      border: 1px solid rgba(255, 210, 140, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    /* 品牌标识区域 */
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo-text {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #b6562c, #d97c3e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 4px rgba(180, 80, 20, 0.2);
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .logo-text span {
+      font-size: 1.2rem;
+      font-weight: 600;
+      background: #c47a4a;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sub-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f5e7d9;
+      padding: 8px 18px;
+      border-radius: 40px;
+      color: #7b4a2c;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(140, 80, 30, 0.1);
+    }
+
+    .sub-brand i {
+      font-style: normal;
+      font-size: 1.2rem;
+    }
+
+    .daligroup {
+      text-align: right;
+      font-size: 0.7rem;
+      color: #af8b6b;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* 主标题 */
+    .hero-title {
+      text-align: center;
+      margin: 15px 0 18px;
+    }
+
+    .hero-title h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(180deg, #5e3a22 20%, #8b5a3a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+    }
+
+    .slogan {
+      background: #f8d5b0;
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-weight: bold;
+      color: #613d22;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    /* 问题区域 */
+    .quiz-area {
+      margin: 25px 0 10px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 7px;
+      background: #f0ddcc;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #d18a4a, #e8a86c);
+      border-radius: 10px;
+      box-shadow: 0 0 8px #f5b27a;
+      transition: width 0.4s ease;
+    }
+
+    .question-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #4d2e1b;
+      margin-bottom: 25px;
+      line-height: 1.4;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #edd5bd;
+      border-radius: 24px;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #5a3a24;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #fffaf4;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+      backdrop-filter: blur(4px);
+    }
+
+    .option-btn:hover {
+      border-color: #cf9f6e;
+      background: #fff4e7;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px rgba(200, 120, 40, 0.12);
+    }
+
+    .option-letter {
+      background: #f3dfcc;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #7b461f;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* 结果卡片 */
+    .result-card {
+      text-align: center;
+      background: linear-gradient(180deg, #fff6ed 0%, #ffeede 100%);
+      border-radius: 40px;
+      padding: 30px 20px;
+      margin: 15px 0;
+      border: 1px solid #f3cc9c;
+    }
+
+    .main-type {
+      font-size: 2.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #9b5623, #cc7b3a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 15px 0 5px;
+    }
+
+    .sub-type {
+      font-size: 1.3rem;
+      color: #785737;
+      font-weight: 600;
+      background: #f5e2cf;
+      display: inline-block;
+      padding: 6px 22px;
+      border-radius: 20px;
+      margin: 10px 0;
+    }
+
+    .description {
+      color: #4e3622;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-top: 20px;
+      background: rgba(255,240,220,0.7);
+      padding: 18px;
+      border-radius: 28px;
+    }
+
+    .restart-btn {
+      background: #e7b27c;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 35px;
+      font-weight: bold;
+      color: white;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #b35f2c, #d5833c);
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 10px 18px rgba(180, 90, 20, 0.25);
+    }
+
+    .restart-btn:hover {
+      background: linear-gradient(135deg, #9f4f22, #c27230);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="container" id="appContainer">
+  <!-- 品牌头 -->
+  <div class="brand-header">
+    <div class="logo-text">
+      🥔 可比克<span>·简</span>
+    </div>
+    <div class="sub-brand">
+      <i>🧂</i> 马铃薯 · 植物油 · 海盐 <i>🌻</i>
+    </div>
+  </div>
+  <div class="daligroup">达利食品集团</div>
+
+  <!-- 动态区域 -->
+  <div id="dynamicContent"></div>
+</div>
+
+<script>
+  (function() {
+    // ---- 题库：基于原料特质，共16题 ----
+    const questions = [
+      {
+        question: "你更欣赏哪种“基础感”？",
+        options: [
+          { text: "像马铃薯一样，朴实、接地气，提供最实在的能量", trait: "potato" },
+          { text: "像植物油般温润调和，让一切变得更柔滑顺畅", trait: "oil" },
+          { text: "如同海盐，纯粹而不可或缺，用微小存在提升整体", trait: "salt" }
+        ]
+      },
+      {
+        question: "面对复杂局面，你的本能反应是？",
+        options: [
+          { text: "回归本质，抓住最核心的部分 (马铃薯·本源)", trait: "potato" },
+          { text: "寻找润滑点，减少摩擦，让大家舒服相处 (植物油·调和)", trait: "oil" },
+          { text: "保留关键要素，去除冗余，精准提味 (海盐·凝练)", trait: "salt" }
+        ]
+      },
+      {
+        question: "哪种自然元素最吸引你？",
+        options: [
+          { text: "深厚的土壤与地下块茎，沉稳有内涵", trait: "potato" },
+          { text: "金色的种子与流动的光泽，轻盈充满能量", trait: "oil" },
+          { text: "阳光下的盐晶与海洋，透明且具有结构感", trait: "salt" }
+        ]
+      },
+      {
+        question: "朋友形容你更接近？",
+        options: [
+          { text: "稳定可靠，像马铃薯一样是基石般的存在", trait: "potato" },
+          { text: "灵活包容，像植物油适配各种环境", trait: "oil" },
+          { text: "清爽鲜明，像海盐一样让人印象深刻", trait: "salt" }
+        ]
+      },
+      {
+        question: "在团队中，你倾向于扮演什么角色？",
+        options: [
+          { text: "提供坚实基础，保证大家不饿肚子 (马铃薯·供给)", trait: "potato" },
+          { text: "协调者，让合作更丝滑，减少冲突 (植物油·融合)", trait: "oil" },
+          { text: "点出关键问题，用简洁建议提升整体 (海盐·点睛)", trait: "salt" }
+        ]
+      },
+      {
+        question: "对于“简单”的理解，你更认同？",
+        options: [
+          { text: "简单是丰盈的纯粹，如同马铃薯本身即是美味", trait: "potato" },
+          { text: "简单是轻盈的陪伴，如植物油不掩盖食材本色", trait: "oil" },
+          { text: "简单是极致的纯粹，几粒海盐便能唤醒灵魂", trait: "salt" }
+        ]
+      },
+      {
+        question: "选择一种生活方式？",
+        options: [
+          { text: "扎根一方土地，深耕细作 (马铃薯·扎根)", trait: "potato" },
+          { text: "流动自由，探索不同可能 (植物油·流动)", trait: "oil" },
+          { text: "结晶时光，专注而有棱角 (海盐·结晶)", trait: "salt" }
+        ]
+      },
+      {
+        question: "当你感到疲惫时，什么能治愈你？",
+        options: [
+          { text: "热乎乎的朴实食物，直接的能量补给", trait: "potato" },
+          { text: "一场舒缓的按摩或柔和的香气", trait: "oil" },
+          { text: "一杯淡盐水或海风，让意识清醒", trait: "salt" }
+        ]
+      },
+      {
+        question: "你的社交风格偏向？",
+        options: [
+          { text: "温和厚道，像马铃薯一样不张扬但人人需要", trait: "potato" },
+          { text: "圆融通达，像植物油一样快速融入各个圈子", trait: "oil" },
+          { text: "清爽直接，像海盐一样有点个性，但不可或缺", trait: "salt" }
+        ]
+      },
+      {
+        question: "面对压力时，你通常？",
+        options: [
+          { text: "像马铃薯一样抗压，内在坚硬", trait: "potato" },
+          { text: "像植物油般转化压力为润滑力", trait: "oil" },
+          { text: "像海盐溶解，但过后留下痕迹", trait: "salt" }
+        ]
+      },
+      {
+        question: "哪种创作更让你心动？",
+        options: [
+          { text: "陶艺或烘焙，从泥土/面团中诞生形状", trait: "potato" },
+          { text: "调香或绘画，融合不同元素", trait: "oil" },
+          { text: "雕塑或摄影，捕捉光影与结构", trait: "salt" }
+        ]
+      },
+      {
+        question: "你更看重哪种价值？",
+        options: [
+          { text: "饱腹感/安全感 —— 基础价值", trait: "potato" },
+          { text: "顺畅感/平衡感 —— 过程价值", trait: "oil" },
+          { text: "提味感/清晰感 —— 点睛价值", trait: "salt" }
+        ]
+      },
+      {
+        question: "如果是一种天气？",
+        options: [
+          { text: "多云但温暖的大地", trait: "potato" },
+          { text: "和煦微风与晴朗", trait: "oil" },
+          { text: "清爽干烈的晴天", trait: "salt" }
+        ]
+      },
+      {
+        question: "哪种气味让你安心？",
+        options: [
+          { text: "刚挖出的马铃薯混合泥土香", trait: "potato" },
+          { text: "淡淡葵花籽油或橄榄清香", trait: "oil" },
+          { text: "海风携带的矿物咸味", trait: "salt" }
+        ]
+      },
+      {
+        question: "对于“极简”的看法？",
+        options: [
+          { text: "极简是回归一颗马铃薯的纯粹力量", trait: "potato" },
+          { text: "极简是用最少的油润泽生活的本味", trait: "oil" },
+          { text: "极简是几颗海盐就能定义的风骨", trait: "salt" }
+        ]
+      },
+      {
+        question: "最后，你更愿意成为？",
+        options: [
+          { text: "广袤田野里一株马铃薯", trait: "potato" },
+          { text: "金色阳光下摇曳的向日葵", trait: "oil" },
+          { text: "古老盐湖边的一粒结晶", trait: "salt" }
+        ]
+      }
+    ];
+
+    // 副人格映射 (基于原料特性深度挖掘)
+    const subPersonalities = {
+      potato: [
+        { name: "大地之薯", desc: "你像深埋土壤的马铃薯，沉稳、坚韧，提供最根本的能量。看似平凡，却是无数美味的基础。你相信简单即丰盛。" },
+        { name: "黄金淀粉", desc: "你拥有马铃薯般细腻的质地，温和包容，却具备惊人的可塑性。在沉默中凝聚力量，滋养身边人。" },
+        { name: "初芽守护", desc: "你代表马铃薯的生命力，即便在暗处也能萌发。朴实中藏着无限可能，是团队里最可靠的萌芽者。" }
+      ],
+      oil: [
+        { name: "润物葵籽", desc: "你像植物油一样轻盈流动，擅长调和矛盾，让一切顺滑自然。你的存在或许不张扬，但不可或缺。" },
+        { name: "清澈橄榄", desc: "你拥有植物油般的纯净与平衡感，追求健康和谐的关系。为生活增添柔光，却不抢夺本味。" },
+        { name: "能量种子", desc: "你浓缩了植物种子的精华，充满阳光能量。你灵活适应，用温暖润滑每一次相遇。" }
+      ],
+      salt: [
+        { name: "晶盐之骨", desc: "你如海盐般棱角分明，纯粹直接。你的言语精准，能瞬间提升事物的层次，是人群中的提味者。" },
+        { name: "深海凝晶", desc: "你带着海洋的记忆，清澈而深邃。看似微小，却能定义整体的风味，坚守本质的咸度。" },
+        { name: "岩盐之光", desc: "你像古老的岩盐，历经沉淀而愈发纯净。你的存在本身就是一种态度：去繁就简，直击核心。" }
+      ]
+    };
+
+    // 状态
+    let currentQuestionIndex = 0;
+    let scores = { potato: 0, oil: 0, salt: 0 };
+    let userAnswers = [];
+
+    const dynamicContent = document.getElementById('dynamicContent');
+
+    // 渲染函数
+    function renderQuestion() {
+      const q = questions[currentQuestionIndex];
+      const progress = (currentQuestionIndex / questions.length) * 100;
+      const html = `
+        <div class="quiz-area fade-in">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${progress}%;"></div>
+          </div>
+          <div class="question-text">${q.question}</div>
+          <div class="options-grid">
+            ${q.options.map((opt, idx) => `
+              <div class="option-btn" data-trait="${opt.trait}">
+                <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
+                <span>${opt.text}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      dynamicContent.innerHTML = html;
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', handleOptionClick);
+      });
+    }
+
+    function handleOptionClick(e) {
+      const trait = e.currentTarget.dataset.trait;
+      // 记录答案并计分
+      userAnswers.push(trait);
+      if (trait === 'potato') scores.potato += 1;
+      else if (trait === 'oil') scores.oil += 1;
+      else if (trait === 'salt') scores.salt += 1;
+
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function determineMainType() {
+      const { potato, oil, salt } = scores;
+      if (potato >= oil && potato >= salt) return 'potato';
+      if (oil >= potato && oil >= salt) return 'oil';
+      return 'salt';
+    }
+
+    function getSubType(main) {
+      const subList = subPersonalities[main];
+      // 基于其他维度或随机挑选一个副人格（也可以根据第二高特质微调，这里简单使用主特质内部随机，但为了可复现，基于分数和）
+      const seed = scores.potato * 100 + scores.oil * 10 + scores.salt;
+      const index = seed % subList.length;
+      return subList[index];
+    }
+
+    function showResult() {
+      const main = determineMainType();
+      const mainNames = { potato: '马铃薯人格', oil: '植物油人格', salt: '海盐人格' };
+      const mainEmoji = { potato: '🥔', oil: '🌻', salt: '🧂' };
+      const sub = getSubType(main);
+      
+      const html = `
+        <div class="result-card fade-in">
+          <div style="font-size:3rem;">${mainEmoji[main]}</div>
+          <div class="main-type">${mainNames[main]}</div>
+          <div class="sub-type">「${sub.name}」</div>
+          <div class="description">
+            ${sub.desc}<br><br>
+            <span style="font-size:0.9rem; opacity:0.8;">你的原料特质：马铃薯 ${scores.potato} | 植物油 ${scores.oil} | 海盐 ${scores.salt}</span><br>
+            <span style="display:inline-block; margin-top:12px; background:#fbe9d7; padding:4px 12px; border-radius:20px;">可比克简薯片 · 只有马铃薯、植物油、海盐</span>
+          </div>
+          <button class="restart-btn" id="restartBtn">⟳ 重新探索</button>
+        </div>
+      `;
+      dynamicContent.innerHTML = html;
+      document.getElementById('restartBtn').addEventListener('click', restartTest);
+    }
+
+    function restartTest() {
+      currentQuestionIndex = 0;
+      scores = { potato: 0, oil: 0, salt: 0 };
+      userAnswers = [];
+      renderQuestion();
+    }
+
+    // 初始渲染
+    renderQuestion();
+  })();
+</script>
+</body>
+</html>
